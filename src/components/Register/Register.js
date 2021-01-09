@@ -22,23 +22,27 @@ class Register extends Component {
     this.setState({ password: event.target.value });
   };
 
-  onSubmitSignIn = () => {
+  onSubmitRegister = () => {
+    const { name, email, password } = this.state;
     fetch("https://afternoon-coast-00590.herokuapp.com/register", {
-      method: "post",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
+        name: name,
+        email: email,
+        password: password,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        response.json();
+      })
       .then((user) => {
         if (user.id) {
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   render() {
@@ -90,7 +94,7 @@ class Register extends Component {
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
-                onClick={this.onSubmitSignIn}
+                onClick={this.onSubmitRegister}
               />
             </div>
           </div>
